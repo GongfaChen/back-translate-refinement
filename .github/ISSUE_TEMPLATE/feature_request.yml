@@ -1,0 +1,40 @@
+name: 功能建议
+description: 新检查项、新文档格式、流程改进
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: direction
+    attributes:
+      label: 方向
+      options:
+        - guard 新检查项（说明它能拦住哪类错误）
+        - 新文档格式（LaTeX / Word 公式 / Overleaf 协作）
+        - 术语抽取改进
+        - 报告改进
+        - 与 pdf-to-pptx-omml 联动（教材 PDF → 英文讲义 → PPT）
+        - 批量文档模式
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 真实场景
+      description: 你在翻译什么文档、卡在哪一步？请写实际场景而非"希望支持 X"。
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: 你现在怎么绕的
+  - type: dropdown
+    id: willing
+    attributes:
+      label: 参与意愿
+      options:
+        - 只提需求
+        - 可以提供测试样例
+        - 可以测试预发布版
+        - 这是付费版能力，我愿意为之付费
+    validations:
+      required: true

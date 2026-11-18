@@ -1,0 +1,7 @@
+﻿# 回译精修术语表（demo）
+# 格式：zh,en[,note]；en 可用 ; 或 / 分隔多个可接受译法
+zh,en,note
+注意力机制,attention mechanism,核心概念，全篇必须统一
+前馈网络,feed-forward network,FFN
+参数,parameters;parameter count,复数与量词形式都算合规
+残差连接,residual connection,demo 中未出现，用于测试跳过逻辑

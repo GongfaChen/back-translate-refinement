@@ -1,0 +1,47 @@
+name: Bug 报告
+description: guard 误报 / 漏报、术语、报告渲染、流程问题
+labels: ["bug"]
+body:
+  - type: checkboxes
+    id: precheck
+    attributes:
+      label: 预检（必选）
+      options:
+        - label: 我已跑过 `python demo/smoke_test.py demo` 且通过（用于区分环境问题与代码问题）
+          required: true
+        - label: 我已重跑一次并附上 `guard.py --json` 的输出（若与 guard 相关）
+          required: false
+  - type: dropdown
+    id: category
+    attributes:
+      label: 问题类别
+      options:
+        - guard 误报（不该报的报了）
+        - guard 漏报（该报的没报）
+        - 术语抽取/校验
+        - 报告渲染（MD/HTML）
+        - docx 处理
+        - probe 诊断
+        - SKILL.md 流程
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: 环境信息
+      placeholder: "OS / Python 版本（python -V）/ 文档类型（Markdown / LaTeX / docx）"
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: 复现步骤
+      description: 附最小样例（可脱敏）。guard 问题请附原段与译段的原文——token 抽取是逐字的，没有原文无法复现。
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: 实际输出 vs 期望输出
+      render: shell

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 30 条实战坑（pitfalls）
+    url: https://github.com/GongfaChen/back-translate-refinement/blob/main/references/pitfalls.md
+    about: 大多数「误报」其实是设计内行为——先查坑清单再提 issue
+  - name: 质检报告字段说明
+    url: https://github.com/GongfaChen/back-translate-refinement/blob/main/references/report-spec.md
+    about: 报告每个数字怎么读、结论的严格定义、报告不能证明什么
+  - name: 语义判定标准
+    url: https://github.com/GongfaChen/back-translate-refinement/blob/main/references/fidelity-rubric.md
+    about: 语义四分类与迭代终止条件（属 SKILL 流程，不是脚本 bug）

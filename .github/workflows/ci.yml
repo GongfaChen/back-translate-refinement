@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: bt_common self-check (token extraction order)
+        run: python scripts/bt_common.py
+
+      - name: License self-test (RFC 8032 vectors)
+        run: python scripts/license_check.py --self-test
+
+      - name: Environment gate
+        run: python scripts/check_env.py
+
+      - name: Glossary validate (demo table)
+        run: python scripts/glossary.py validate --glossary demo/glossary.csv
+
+      - name: End-to-end smoke (guard must catch all planted defects)
+        run: python demo/smoke_test.py demo
+
+      - name: Probe on demo source
+        run: python scripts/bt_probe.py demo/sample_zh.md --glossary demo/glossary.csv

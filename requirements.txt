@@ -1,0 +1,11 @@
+# back-translate-refinement 运行依赖
+#
+# 安装：pip install -r requirements.txt
+# 环境自检：python scripts/check_env.py
+# Python 版本：3.10+（CI 在 3.12 / 3.13 上验证）
+#
+# 设计取向：纯文本流程（.md/.txt）零第三方依赖——确定性闸的价值在于
+# 「在哪台机器上都能跑出同一个结论」，依赖越少越接近这个目标。
+# python-docx 仅在处理 .docx 原稿/译稿时被 import，纯文本流程不受影响。
+
+python-docx>=1.1
