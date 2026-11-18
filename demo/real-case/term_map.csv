@@ -1,0 +1,10 @@
+﻿# 真实案例术语表（Paper-3，脱敏）
+# 格式：zh,en[,note]；en 可用 ; 或 / 分隔多个可接受译法
+# 本表只收录「每段原文出现该术语时，英文都必须用同一说法」的词，
+# 避免把合法的语义改写误判成术语漂移。
+zh,en,note
+吊杆,hanger,构件名，不用 suspender
+索力,tension,不用 cable force；吊杆索力统一 hanger tension
+归一化,normalise;normalisation,en-GB -ise 体系，不用 normalize/normalization
+标准化,standardise;standardisation,en-GB -ise 体系
+模态空间异常指数,Modal-Space Anomaly Index,首次出现给出全称，缩写 MSAI

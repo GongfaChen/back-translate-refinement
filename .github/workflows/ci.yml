@@ -39,5 +39,8 @@ jobs:
       - name: End-to-end smoke (guard must catch all planted defects)
         run: python demo/smoke_test.py demo
 
+      - name: Real-case replay (Paper-3, desensitised; guard must PASS + 0 fact drift)
+        run: python demo/real-case/run_real_case.py
+
       - name: Probe on demo source
         run: python scripts/bt_probe.py demo/sample_zh.md --glossary demo/glossary.csv

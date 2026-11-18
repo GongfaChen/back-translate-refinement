@@ -31,6 +31,53 @@
 cd demo && python smoke_test.py     # 复现：跑样稿、断言 6 类缺陷全被抓住
 ```
 
+## 真实案例：一篇投稿论文的中译英稿
+
+上面的样稿是"植入缺陷"的教学例子。`demo/real-case/` 里的是**真实产物**：
+一篇桥梁监测论文（拱桥吊杆索力异常两阶段识别）的中译英稿，脱敏后放出了
+**机器正译初稿**与**回译比对精修后**两版对照。
+
+**摘要首句**（精修改动最大的一段）：
+
+| | |
+|---|---|
+| 中文 | 针对运行荷载变化下桥面振动特征易受干扰、异常检出难以直接给出吊杆状态信息的问题，提出……两阶段识别方法 |
+| 初稿 | To address **interference from** varying operational loads and **the limited** hanger-state information **provided by** anomaly detection alone, a two-stage **method combines** a Modal-Space Anomaly Index…… |
+| 精修 | To address **the susceptibility of deck-vibration features to interference under** varying operational loads and **the difficulty for** anomaly detection alone **to provide** hanger-state information **directly**, a two-stage **identification method is proposed that combines**…… |
+
+改动不是"换个词显得更高级"，而是把中文的**主语与因果**补回英文里：原句说的是"桥面振动特征易受干扰"，
+初稿写成 `interference from loads`，主语丢了；精修把它显式化为 `the susceptibility of deck-vibration features to interference`。
+
+**术语与拼写体系**（全文 42 个被改单元里，大多数是这一类）：
+
+```
+localization → localisation      standardization → standardisation
+normalizes   → normalises        regression-output → regression output
+classify predefined → discriminate
+```
+
+**全文口径**（359 个单元，本案例是其中 14 块）：
+
+| 指标 | 值 |
+|---|---|
+| 精修改动单元 | 42（11.7%） |
+| 数字 token / 引用 token | 882 / 28 |
+| 初稿 → 精修的事实级变动 | **0**（数字、引用、`Eq.` 编号逐字保留，脚本逐块复算） |
+| 保真闸 | 10 项全 PASS |
+
+```bash
+cd demo/real-case && python run_real_case.py    # 保真闸 + 增量校验 + 变更分类，约 1 秒
+```
+
+逐段并列见 [`demo/real-case/before_after.md`](demo/real-case/before_after.md)，
+质检报告见 [`demo/real-case/guard_real_report.html`](demo/real-case/guard_real_report.html)。
+
+> 有一处值得单说：精修稿原本把 `15` 写成 `Fifteen`，**保真闸当场报了 error**（中文是数字 15）。
+> 处置不是简单换回数字——英文句首不宜以阿拉伯数字开头——而是把数字移进句中：
+> `Fifteen zeros are padded at each end ...` → `At each end of the convolution, 15 zeros are padded ...`。
+> 闸负责把嫌疑摆上桌面，怎么改才既合规又不伤文体仍然是人的活。
+> 详细披露与"能证明什么/不能证明什么"见 [`demo/real-case/README.md`](demo/real-case/README.md)。
+
 ## 核心组件
 
 | 文件 | 作用 |
@@ -77,7 +124,8 @@ python scripts/report.py out.json                        # 可转发质检报告
 - `license_check --self-test`：RFC 8032 官方向量 + 篡改/过期/越权/免费模式/小阶公钥拒绝
 - `check_env`：Python 版本、依赖矩阵、6 模块 import、Ed25519 签名往返
 - demo 端到端：7 段样稿（6 类植入缺陷）→ guard 报 9 error / 2 warn，逐条与植入缺陷一一对应 → report.py 产出 MD + HTML
-- CI：GitHub Actions（Ubuntu × Python 3.12/3.13）
+- 真实案例复现：Paper-3 脱敏稿 14 块 → guard 10 项全 PASS；初稿→精修 18 个编辑点，数字 51 / 引用 10 / 公式编号 1 零漂移
+- CI：GitHub Actions（Ubuntu × Python 3.12/3.13），上述各项均作为独立 step 跑
 
 ## 已知限制
 

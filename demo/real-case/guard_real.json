@@ -1,0 +1,242 @@
+{
+  "tool": "back-translate-refinement/guard",
+  "version": "0.1.0",
+  "generated_at": "2026-11-18T21:32:52+08:00",
+  "mode": "auto",
+  "inputs": {
+    "source": "C:\\Users\\C\\WorkBuddy\\2026-08-30-15-26-28\\back-translate-refinement\\demo\\real-case\\zh_source.md",
+    "translation": "C:\\Users\\C\\WorkBuddy\\2026-08-30-15-26-28\\back-translate-refinement\\demo\\real-case\\en_refined.md",
+    "back_translation": null,
+    "glossary": "C:\\Users\\C\\WorkBuddy\\2026-08-30-15-26-28\\back-translate-refinement\\demo\\real-case\\term_map.csv",
+    "glossary_terms": 5,
+    "length_band": [
+      0.35,
+      1.1
+    ],
+    "strict_terms": false
+  },
+  "stats": {
+    "blocks_source": 14,
+    "blocks_translation": 14,
+    "cjk_source": 1147,
+    "en_words_translation": 879,
+    "overall_ratio": 0.766,
+    "keep_tokens": 0,
+    "math_tokens": 0,
+    "cite_tokens": 10,
+    "num_tokens": 51,
+    "back": null
+  },
+  "verdict": "PASS",
+  "counts": {
+    "error": 0,
+    "warn": 0,
+    "checks": 10
+  },
+  "checks": [
+    {
+      "key": "coverage",
+      "title": "段落覆盖",
+      "level": "error",
+      "desc": "原稿与译稿的段数、段落边界必须一一对应（段号即对照锚点）",
+      "passed": true,
+      "count": 0,
+      "items": []
+    },
+    {
+      "key": "keep",
+      "title": "结构化占位符",
+      "level": "error",
+      "desc": "<KEEP:type:id> 必须一个不多一个不少（图/表/公式的位置锚点）",
+      "passed": true,
+      "count": 0,
+      "items": []
+    },
+    {
+      "key": "keep-order",
+      "title": "占位符顺序",
+      "level": "error",
+      "desc": "同一类型的 KEEP 编号在译稿中必须按原序出现",
+      "passed": true,
+      "count": 0,
+      "items": []
+    },
+    {
+      "key": "math",
+      "title": "公式保真",
+      "level": "error",
+      "desc": "行内与行间公式必须逐字保留（含上下标、希腊字母）",
+      "passed": true,
+      "count": 0,
+      "items": []
+    },
+    {
+      "key": "num",
+      "title": "数字保真",
+      "level": "error",
+      "desc": "数字与百分号必须一致（12M 写成 21M 就是硬错误）",
+      "passed": true,
+      "count": 0,
+      "items": []
+    },
+    {
+      "key": "cite",
+      "title": "引用保真",
+      "level": "error",
+      "desc": "文献引用标记 [1]、[2-3] 必须保留且数量一致",
+      "passed": true,
+      "count": 0,
+      "items": []
+    },
+    {
+      "key": "residue",
+      "title": "译稿残留中文",
+      "level": "error",
+      "desc": "英译稿段落中不应残留成片汉字（可能是漏译或只译了一半）",
+      "passed": true,
+      "count": 0,
+      "items": []
+    },
+    {
+      "key": "glossary",
+      "title": "术语一致性",
+      "level": "warn",
+      "desc": "原文出现的术语，译稿须使用术语表规定的译法（多个可接受译法用 ; 或 / 分隔）",
+      "passed": true,
+      "count": 0,
+      "items": []
+    },
+    {
+      "key": "length",
+      "title": "英译长度比",
+      "level": "warn",
+      "desc": "英文字数/中文字数 合理区间 0.35–1.10；越界多为漏译或扩写",
+      "passed": true,
+      "count": 0,
+      "items": []
+    },
+    {
+      "key": "duplicate",
+      "title": "译稿相邻重复段",
+      "level": "warn",
+      "desc": "相邻段落内容完全相同，多为复制粘贴失误",
+      "passed": true,
+      "count": 0,
+      "items": []
+    }
+  ],
+  "blocks": [
+    {
+      "block": 1,
+      "status": "ok",
+      "issues": [],
+      "cjk": 2,
+      "words": 1,
+      "ratio": 0.5
+    },
+    {
+      "block": 2,
+      "status": "ok",
+      "issues": [],
+      "cjk": 300,
+      "words": 199,
+      "ratio": 0.663
+    },
+    {
+      "block": 3,
+      "status": "ok",
+      "issues": [],
+      "cjk": 6,
+      "words": 3,
+      "ratio": 0.5
+    },
+    {
+      "block": 4,
+      "status": "ok",
+      "issues": [],
+      "cjk": 249,
+      "words": 160,
+      "ratio": 0.643
+    },
+    {
+      "block": 5,
+      "status": "ok",
+      "issues": [],
+      "cjk": 4,
+      "words": 2,
+      "ratio": 0.5
+    },
+    {
+      "block": 6,
+      "status": "ok",
+      "issues": [],
+      "cjk": 171,
+      "words": 167,
+      "ratio": 0.977
+    },
+    {
+      "block": 7,
+      "status": "ok",
+      "issues": [],
+      "cjk": 7,
+      "words": 4,
+      "ratio": 0.571
+    },
+    {
+      "block": 8,
+      "status": "ok",
+      "issues": [],
+      "cjk": 96,
+      "words": 74,
+      "ratio": 0.771
+    },
+    {
+      "block": 9,
+      "status": "ok",
+      "issues": [],
+      "cjk": 9,
+      "words": 5,
+      "ratio": 0.556
+    },
+    {
+      "block": 10,
+      "status": "ok",
+      "issues": [],
+      "cjk": 97,
+      "words": 92,
+      "ratio": 0.948
+    },
+    {
+      "block": 11,
+      "status": "ok",
+      "issues": [],
+      "cjk": 8,
+      "words": 5,
+      "ratio": 0.625
+    },
+    {
+      "block": 12,
+      "status": "ok",
+      "issues": [],
+      "cjk": 93,
+      "words": 78,
+      "ratio": 0.839
+    },
+    {
+      "block": 13,
+      "status": "ok",
+      "issues": [],
+      "cjk": 4,
+      "words": 3,
+      "ratio": 0.75
+    },
+    {
+      "block": 14,
+      "status": "ok",
+      "issues": [],
+      "cjk": 101,
+      "words": 86,
+      "ratio": 0.851
+    }
+  ]
+}

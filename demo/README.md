@@ -17,3 +17,14 @@ python demo/smoke_test.py demo      # 端到端冒烟：断言全部缺陷被捕
 | `smoke_test.py` | 端到端断言：[1] token 抽取 [2] 术语抽取 [3] 术语表校验 [4] 六类缺陷全捕获 [5] 报告生成 [6] **反向回归**（正确稿必须 PASS） |
 
 缺陷清单见 `smoke_test.py` 文件头注释。运行后生成的 `guard_report.json/.md/.html` 已被 `.gitignore` 排除。
+
+## real-case：真实稿件（不是植入缺陷）
+
+`real-case/` 是另一类材料：一篇投稿论文的中译英稿，脱敏后放出**正译初稿**与**精修稿**两版对照，
+用来回答"这套流程在真稿上到底改了什么、有没有改坏"。
+
+```bash
+python demo/real-case/run_real_case.py     # 保真闸 + 增量校验 + 变更分类
+```
+
+结论与边界见 [`real-case/README.md`](real-case/README.md)。

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>回译精修质检报告 · PASS</title>
+<style>
+  :root { --ink:#1c1c1e; --muted:#6b7280; --line:#e5e7eb; --bg:#fafaf9; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:40px 20px; background:var(--bg); color:var(--ink);
+         font:15px/1.7 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; background:#fff; border:1px solid var(--line);
+           border-radius:14px; padding:38px 42px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+  h1 { font-size:24px; margin:0 0 6px; letter-spacing:-.01em; }
+  h2 { font-size:17px; margin:34px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  h3 { font-size:15px; margin:20px 0 8px; }
+  .banner { display:flex; align-items:center; gap:14px; background:#e8f6ee; color:#0f8a4d;
+             border:1px solid #0f8a4d33; border-radius:10px; padding:14px 18px; margin:18px 0 4px; }
+  .banner .verdict { font-size:22px; font-weight:700; letter-spacing:.02em; }
+  .banner .sub { color:var(--muted); font-size:13px; margin-left:auto; }
+  table { width:100%; border-collapse:collapse; margin:10px 0; font-size:14px; }
+  th,td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { font-weight:600; color:var(--muted); font-size:13px; }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .chip { font-size:11px; border:1px solid; border-radius:999px; padding:1px 8px; white-space:nowrap; }
+  .ok { color:#0f8a4d; } .bad { color:#c0392b; } .warn { color:#a86a00; }
+  .muted { color:var(--muted); } .small { font-size:13px; }
+  code { background:#f3f4f6; padding:1px 6px; border-radius:5px; font-size:13px;
+          font-family:ui-monospace,Consolas,monospace; word-break:break-all; }
+  ul { margin:6px 0 14px; padding-left:22px; } li { margin:4px 0; }
+  .note { background:#f8fafc; border-left:3px solid #cbd5e1; padding:12px 16px; border-radius:0 8px 8px 0;
+           font-size:14px; color:#374151; }
+  footer { margin-top:32px; padding-top:14px; border-top:1px solid var(--line);
+            color:var(--muted); font-size:12px; }
+</style></head>
+<body><div class="wrap">
+  <h1>回译精修 · 质检报告</h1>
+  <div class="muted small">back-translate-refinement/guard v0.1.0 · 2026-11-18T21:32:52+08:00</div>
+
+  <div class="banner">
+    <span class="verdict">PASS</span><span>通过</span>
+    <span class="sub">硬错误 0 · 建议复核 0 · 检查项 10</span>
+  </div>
+
+  <h2>一、关键指标</h2>
+  <table>
+    <tr><td>原稿</td><td>14 段 / 1147 汉字</td></tr>
+    <tr><td>译稿</td><td>14 段 / 879 英文词</td></tr>
+    <tr><td>整体长度比</td><td>0.766（英文词/汉字）</td></tr>
+    <tr><td>受保护元素</td><td>占位符 0 / 公式 0 / 引用 10 / 数字 51</td></tr>
+    
+  </table>
+
+  <h2>二、检查项一览</h2>
+  <table><thead><tr><th>检查项</th><th>级别</th><th>结果</th><th class="num">问题数</th></tr></thead>
+  <tbody><tr><td>段落覆盖</td><td><span class='muted'>—</span></td><td><span class='ok'>通过</span></td><td class='num'>0</td></tr>
+<tr><td>结构化占位符</td><td><span class='muted'>—</span></td><td><span class='ok'>通过</span></td><td class='num'>0</td></tr>
+<tr><td>占位符顺序</td><td><span class='muted'>—</span></td><td><span class='ok'>通过</span></td><td class='num'>0</td></tr>
+<tr><td>公式保真</td><td><span class='muted'>—</span></td><td><span class='ok'>通过</span></td><td class='num'>0</td></tr>
+<tr><td>数字保真</td><td><span class='muted'>—</span></td><td><span class='ok'>通过</span></td><td class='num'>0</td></tr>
+<tr><td>引用保真</td><td><span class='muted'>—</span></td><td><span class='ok'>通过</span></td><td class='num'>0</td></tr>
+<tr><td>译稿残留中文</td><td><span class='muted'>—</span></td><td><span class='ok'>通过</span></td><td class='num'>0</td></tr>
+<tr><td>术语一致性</td><td><span class='muted'>—</span></td><td><span class='ok'>通过</span></td><td class='num'>0</td></tr>
+<tr><td>英译长度比</td><td><span class='muted'>—</span></td><td><span class='ok'>通过</span></td><td class='num'>0</td></tr>
+<tr><td>译稿相邻重复段</td><td><span class='muted'>—</span></td><td><span class='ok'>通过</span></td><td class='num'>0</td></tr></tbody></table>
+
+  <h2>三、必须修正（硬错误）</h2>
+  <p class='muted'>无。</p>
+
+  <h2>四、建议复核（可疑项）</h2>
+  <p class='muted'>无。</p>
+
+  <h2>五、逐段状态</h2>
+  <table><thead><tr><th class="num">段</th><th class="num">汉字</th><th class="num">英文词</th>
+  <th class="num">比值</th><th>状态</th><th>问题</th></tr></thead>
+  <tbody><tr><td class='num'>1</td><td class='num'>2</td><td class='num'>1</td><td class='num'>0.50</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>2</td><td class='num'>300</td><td class='num'>199</td><td class='num'>0.66</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>3</td><td class='num'>6</td><td class='num'>3</td><td class='num'>0.50</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>4</td><td class='num'>249</td><td class='num'>160</td><td class='num'>0.64</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>5</td><td class='num'>4</td><td class='num'>2</td><td class='num'>0.50</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>6</td><td class='num'>171</td><td class='num'>167</td><td class='num'>0.98</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>7</td><td class='num'>7</td><td class='num'>4</td><td class='num'>0.57</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>8</td><td class='num'>96</td><td class='num'>74</td><td class='num'>0.77</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>9</td><td class='num'>9</td><td class='num'>5</td><td class='num'>0.56</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>10</td><td class='num'>97</td><td class='num'>92</td><td class='num'>0.95</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>11</td><td class='num'>8</td><td class='num'>5</td><td class='num'>0.62</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>12</td><td class='num'>93</td><td class='num'>78</td><td class='num'>0.84</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>13</td><td class='num'>4</td><td class='num'>3</td><td class='num'>0.75</td><td class='ok'>正常</td><td class='small'>—</td></tr>
+<tr><td class='num'>14</td><td class='num'>101</td><td class='num'>86</td><td class='num'>0.85</td><td class='ok'>正常</td><td class='small'>—</td></tr></tbody></table>
+
+  <h2>六、可复现信息</h2>
+  <ul><li>原稿：<code>C:\Users\C\WorkBuddy\2026-08-30-15-26-28\back-translate-refinement\demo\real-case\zh_source.md</code><br><span class='muted small'>sha256: 6b62de8ebc7e</span></li>
+<li>译稿：<code>C:\Users\C\WorkBuddy\2026-08-30-15-26-28\back-translate-refinement\demo\real-case\en_refined.md</code><br><span class='muted small'>sha256: f4a2c9d48b0f</span></li>
+<li>术语表：<code>C:\Users\C\WorkBuddy\2026-08-30-15-26-28\back-translate-refinement\demo\real-case\term_map.csv</code><br><span class='muted small'>sha256: 784c889b68ea</span></li></ul>
+
+  <h2>七、本报告的边界</h2>
+  <div class="note">
+    本报告覆盖<strong>机械可判项</strong>：段落覆盖、结构化占位符、公式、数字、文献引用、译稿残留中文、
+    术语一致性、长度异常、相邻重复、回译往返。<br>
+    <strong>不覆盖语义</strong>：语义是否走样（缺失 / 添加 / 扭曲）须按 <code>SKILL.md</code> Step 3 逐段比对，
+    本报告不能替代语义复核。长度比与术语项为启发式提示，越界不等于错误。
+  </div>
+
+  <footer>由 back-translate-refinement 生成 · 同一输入必然得到同一结论（见 sha256 与命令）</footer>
+</div></body></html>
