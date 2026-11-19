@@ -46,7 +46,7 @@ jobs:
 
       # 默认是 golden-file 校验模式：产物写临时目录、与仓库内版本逐字比对（忽略 generated_at），
       # 不修改工作区；文件内容真变了才红，要更新基准用 --update。
-      - name: Real-case replay (golden-file check: guard PASS + 0 fact drift + artifacts unchanged)
+      - name: "Real-case replay (golden-file check: guard PASS + 0 fact drift + artifacts unchanged)"
         run: python demo/real-case/run_real_case.py
 
       - name: Probe on demo source
