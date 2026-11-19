@@ -8,23 +8,30 @@
 | `en_draft.md` | 机器**正译初稿**（未经回译比对） |
 | `en_refined.md` | **精修稿**（回译比对 + 保真闸 + 人工修正确认后） |
 | `term_map.csv` | 全篇术语约定（en-GB 体系） |
-| `run_real_case.py` | 一键复现：保真闸 + 增量校验 + 变更分类 |
-| `before_after.md` | 由脚本生成的逐段并列对比 |
-| `guard_real_report.html` | 由 `report.py` 生成的单文件质检报告 |
+| `run_real_case.py` | 复现与校验：保真闸 + 增量校验 + 变更分类 + **golden-file 比对** |
+| `before_after.md` | 逐段并列对比（基准产物，`--update` 重写） |
+| `guard_real_report.html` | 单文件质检报告（基准产物，`--update` 重写） |
 
-## 复现
+## 复现与校验
+
+`run_real_case.py` 有两种模式，默认是**校验模式**（CI 用的就是它）：
 
 ```bash
 cd demo/real-case
-python run_real_case.py      # 约 1 秒，全部离线
+python run_real_case.py            # 校验模式：产物写临时目录，与仓库内基准逐字比对（忽略生成时间），不弄脏工作区
+python run_real_case.py --update   # 更新模式：重写 before_after.md 与 guard_real_* 基准，git diff 确认后提交
 ```
 
-三段输出 + 一份报告：
+校验模式的价值：这四份基准产物（`before_after.md`、`guard_real.json`、`guard_real_report.md/.html`）
+本身也是「同一输入必然得到同一结论」的活证明——任何人、任何机器上重跑，
+忽略 `generated_at` 后应与仓库内版本逐字一致；不一致即 guard 行为漂移，CI 直接红。
+
+校验模式下跑三件事 + 一份报告：
 
 1. **保真闸**（`guard.py`，中文原稿 vs 精修稿）：10 项检查全 PASS；
 2. **增量校验**：初稿 → 精修稿，数字 / 引用 / `Eq.` 编号必须逐字不变；
 3. **变更分类**：把词级编辑归入拼写体系、数字形式、术语搭配、标点结构、语义改写五类；
-4. 顺带调 `report.py` 生成 `guard_real_report.md` / `.html`（报告内的生成时间会随运行刷新，属正常）。
+4. 顺带调 `report.py` 生成 `guard_real_report.md` / `.html` 与基准比对。
 
 ## 结果
 

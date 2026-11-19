@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import sys
 from collections import Counter
 from dataclasses import dataclass, field
@@ -526,7 +527,13 @@ def main() -> int:
     if args.json_out:
         out = Path(args.json_out)
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+        # 原子写：先写临时文件再 os.replace。直接覆盖写 target 在 Windows 上
+        # 偶发被杀毒/索引进程短暂占用 → PermissionError，且此时结论已打印、
+        # 进程却以异常码退出，调用方（如 smoke_test）会看到「打印 FAIL 但退出码 1」。
+        payload = json.dumps(report, ensure_ascii=False, indent=2)
+        tmp = out.with_suffix(out.suffix + ".tmp")
+        tmp.write_text(payload, encoding="utf-8")
+        os.replace(tmp, out)
         print(f"\nJSON 已写入：{out}")
 
     return {"PASS": EXIT_PASS, "WARN": EXIT_WARN, "FAIL": EXIT_FAIL}[report["verdict"]]

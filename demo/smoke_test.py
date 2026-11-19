@@ -83,7 +83,10 @@ def main() -> int:
         "--glossary", str(demo / "glossary.csv"),
         "--json", str(out_json),
     ])
-    assert rc.returncode == 2, f"guard 应判 FAIL(2)，实际 {rc.returncode}：{rc.stdout[-400:]}"
+    assert rc.returncode == 2, (
+        f"guard 应判 FAIL(2)，实际 {rc.returncode}\n--- stdout 尾部 ---\n{rc.stdout[-400:]}\n"
+        f"--- stderr（退出码异常时先看这里，如 JSON 写入被占用）---\n{rc.stderr[-800:]}"
+    )
     report = json.loads(out_json.read_text(encoding="utf-8"))
     assert report["verdict"] == "FAIL"
 
