@@ -3,7 +3,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/GongfaChen/back-translate-refinement/ci.yml?branch=main&label=CI)](https://github.com/GongfaChen/back-translate-refinement/actions/workflows/ci.yml)
 [![release](https://img.shields.io/github/v/release/GongfaChen/back-translate-refinement)](https://github.com/GongfaChen/back-translate-refinement/releases)
 [![license](https://img.shields.io/github/license/GongfaChen/back-translate-refinement)](LICENSE)
-[![python](https://img.shields.io/badge/python-3.10%2B-3776AB)](requirements.txt)
+[![python](https://img.shields.io/badge/python-3.12%2B-3776AB)](requirements.txt)
 [![platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
 
 **Agent skill：把中文稿件翻译成"语义严格一致"的英文——回译比对 + 确定性保真闸 + 可转发的质检报告。**
@@ -85,7 +85,7 @@ cd demo/real-case && python run_real_case.py    # 保真闸 + 增量校验 + 变
 | `SKILL.md` | Agent 工作流：正译 → 回译（盲）→ 硬闸 → 语义比对 → 修正 → 交付 |
 | `scripts/bt_probe.py` | **免费诊断**（只读）：规模、受保护元素统计、分批建议、风险清单（docx 公式丢失等） |
 | `scripts/glossary.py` | 术语抽取（CJK n-gram + 原文自带「中文（English）」对照）+ 术语表自身校验 |
-| `scripts/guard.py` | **确定性保真闸**（核心资产）：占位符 / 占位符顺序 / 公式逐字 / 数字 / 引用 / 段落覆盖 / 残留中文 / 术语一致性 / 长度异常 / 相邻重复 / 回译往返，共 10+ 项 |
+| `scripts/guard.py` | **确定性保真闸**（核心资产）：占位符 / 占位符顺序 / 公式逐字 / 数字 / 引用 / 段落覆盖 / 残留中文 / 术语一致性 / 长度异常 / 相邻重复，共 **10 项**（带 `--back` 再补 3 项回译检查，共 13 项） |
 | `scripts/report.py` | 把 guard JSON 渲染成可转发的质检报告（Markdown + 单文件 HTML，含输入 sha256 与复现命令） |
 | `scripts/license_check.py` | 许可钩子：纯 Python Ed25519（与 pdf-to-pptx-omml 共用同一套后端），当前全免费放行 |
 | `references/pitfalls.md` | 30 条实战坑（本仓库最重要的复利资产） |
@@ -131,7 +131,8 @@ python scripts/report.py out.json                        # 可转发质检报告
 
 - 语义一致性（缺失/添加/扭曲）无法由脚本判定——那是 SKILL.md Step 5 的工作，报告会明确声明这一点
 - 作者-年份引用、科学计数法（1e-4）等非逐字等价形态，机械检查抓不住，靠术语表 + 人工
-- 英文→中文方向未系统测试：占位符与分段机制方向无关，但长度比阈值是按"英译中"标定的
+- 长度比阈值按**中译英**标定（`英文词/汉字`，默认带 0.35–1.10）；反向（英→中）或其它语对未系统测试，
+  需要把 `--length-band` 换成反向区间（中文字符/英文词，约 1.2–2.8），或放宽成 `0,99` 先绕过该项
 - `1e-4`、`v2.0` 这类含字母数字混合 token 的比较规则偏保守（宁可放过，不可误报）
 
 ## Roadmap

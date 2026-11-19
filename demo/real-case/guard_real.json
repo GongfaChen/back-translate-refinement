@@ -1,19 +1,25 @@
 {
   "tool": "back-translate-refinement/guard",
   "version": "0.1.0",
-  "generated_at": "2026-11-18T21:32:52+08:00",
+  "generated_at": "2026-11-19T08:13:39+08:00",
   "mode": "auto",
   "inputs": {
-    "source": "C:\\Users\\C\\WorkBuddy\\2026-08-30-15-26-28\\back-translate-refinement\\demo\\real-case\\zh_source.md",
-    "translation": "C:\\Users\\C\\WorkBuddy\\2026-08-30-15-26-28\\back-translate-refinement\\demo\\real-case\\en_refined.md",
+    "source": "zh_source.md",
+    "translation": "en_refined.md",
     "back_translation": null,
-    "glossary": "C:\\Users\\C\\WorkBuddy\\2026-08-30-15-26-28\\back-translate-refinement\\demo\\real-case\\term_map.csv",
+    "glossary": "term_map.csv",
     "glossary_terms": 5,
     "length_band": [
       0.35,
       1.1
     ],
     "strict_terms": false
+  },
+  "input_sha256": {
+    "source": "6b62de8ebc7e",
+    "translation": "f4a2c9d48b0f",
+    "back_translation": null,
+    "glossary": "784c889b68ea"
   },
   "stats": {
     "blocks_source": 14,

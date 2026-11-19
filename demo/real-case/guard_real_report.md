@@ -1,6 +1,6 @@
 # 回译精修 · 质检报告
 
-**结论：PASS（通过）** ｜ 生成于 2026-11-18T21:32:52+08:00 ｜ back-translate-refinement/guard v0.1.0
+**结论：PASS（通过）** ｜ 生成于 2026-11-19T08:13:39+08:00 ｜ back-translate-refinement/guard v0.1.0
 
 - 硬错误 **0** 项｜建议复核 **0** 项｜共 10 项检查
 
@@ -58,20 +58,20 @@
 
 ## 六、可复现信息
 
-- 原稿：`C:\Users\C\WorkBuddy\2026-08-30-15-26-28\back-translate-refinement\demo\real-case\zh_source.md`（sha256: 6b62de8ebc7e）
-- 译稿：`C:\Users\C\WorkBuddy\2026-08-30-15-26-28\back-translate-refinement\demo\real-case\en_refined.md`（sha256: f4a2c9d48b0f）
-- 术语表：`C:\Users\C\WorkBuddy\2026-08-30-15-26-28\back-translate-refinement\demo\real-case\term_map.csv`（sha256: 784c889b68ea）
+- 原稿：`zh_source.md`（sha256: 6b62de8ebc7e）
+- 译稿：`en_refined.md`（sha256: f4a2c9d48b0f）
+- 术语表：`term_map.csv`（sha256: 784c889b68ea）
 
 ```bash
 python scripts/guard.py \
-  --source "C:\Users\C\WorkBuddy\2026-08-30-15-26-28\back-translate-refinement\demo\real-case\zh_source.md" \
-  --translation "C:\Users\C\WorkBuddy\2026-08-30-15-26-28\back-translate-refinement\demo\real-case\en_refined.md" \
-  --glossary "C:\Users\C\WorkBuddy\2026-08-30-15-26-28\back-translate-refinement\demo\real-case\term_map.csv" \
+  --source "zh_source.md" \
+  --translation "en_refined.md" \
+  --glossary "term_map.csv" \
   --json out.json
 ```
 
 ## 七、本报告的边界
 
 - 覆盖：段落覆盖、结构化占位符、公式、数字、文献引用、译稿残留中文、术语一致性、长度异常、相邻重复、回译往返。
-- **不覆盖语义**：本报告是*机械可判项*的闸。语义是否走样（缺失/添加/扭曲）须按 `SKILL.md` Step 3 逐段比对，结论不可由本报告替代。
+- **不覆盖语义**：本报告是*机械可判项*的闸。语义是否走样（缺失/添加/扭曲）须按 `SKILL.md` Step 5 逐段比对，结论不可由本报告替代。
 - 长度比与术语项为启发式：越界只代表「值得看一眼」，不等于错误。

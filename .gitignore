@@ -1,18 +1,16 @@
 __pycache__/
 *.pyc
-demo/smoke_out.*
-demo/preview_*
-demo/test_probe.pdf
 *.egg-info/
 .venv/
-demo/crop_test/
+
+# 许可相关：私钥种子与签发的 license 绝不入库
 ed25519_seed.hex
 ed25519_private*
 license.json
 _tmp_lk/
-demo/ci_sample.pdf
+
+# demo 运行产物（可随时重生成；real-case 的 guard_real_* 是 golden 文件，保留入库）
 demo/guard_report.json
 demo/guard_report.md
 demo/guard_report.html
 demo/terms_draft.csv
-assets/_export_tmp.py

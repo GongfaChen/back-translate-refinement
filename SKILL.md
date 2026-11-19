@@ -1,7 +1,7 @@
 ---
 name: back-translate-refinement
 description: 回译精修（Back-Translation Refinement）工作流。当用户需要将中文原稿翻译为英文并确保语义精确一致，或提出"回译""翻译精修""back-translate""翻译打磨""翻译校对"等请求时使用。通过"正译→回译→硬闸→语义比对→修正"的迭代循环消除单向翻译的语义损耗；占位符机制完整保留插图、表格、文献、公式；确定性脚本产出可转发的质检报告。
-version: 2.0.0
+version: 0.1.0
 agent_created: true
 ---
 
@@ -32,8 +32,14 @@ agent_created: true
 
 ```bash
 python scripts/check_env.py
-python scripts/bt_probe.py 原稿.md --translation 译稿.md 2>/dev/null || python scripts/bt_probe.py 原稿.md
+# 有英译稿时（可同时检查译文侧规模与占位符覆盖）：
+python scripts/bt_probe.py 原稿.md --translation 译稿.md
+# 还没有译稿时（只诊断原稿）：
+python scripts/bt_probe.py 原稿.md
 ```
+
+> 上面两条 probe 命令按情况二选一。注意示例是跨平台写法：`2>/dev/null`、`||` 只在 bash 下可用，
+> PowerShell 里会报错，所以不要照搬 shell 重定向。
 
 - probe 给出：段数、汉字数、受保护元素统计、分批建议、风险清单（如「含 12 处公式但无占位符」「docx 公式对象转文本会丢」）。
 - **先修结构问题再翻译**：probe 报的每一条「高」级风险都必须在 Step 2 之前解决。

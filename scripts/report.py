@@ -48,14 +48,23 @@ def sha256_short(path: str) -> str:
 
 def collect(report: dict) -> dict:
     inputs = report["inputs"]
+    embedded = report.get("input_sha256") or {}
+
+    def digest(key: str, path: str) -> str:
+        """优先用 guard JSON 里落盘的哈希；旧格式 JSON 才回退去读文件。"""
+        if embedded.get(key):
+            return embedded[key]
+        return sha256_short(path)
+
     files = {
-        "原稿": (inputs["source"], sha256_short(inputs["source"])),
-        "译稿": (inputs["translation"], sha256_short(inputs["translation"])),
+        "原稿": (inputs["source"], digest("source", inputs["source"])),
+        "译稿": (inputs["translation"], digest("translation", inputs["translation"])),
     }
     if inputs.get("back_translation"):
-        files["回译稿"] = (inputs["back_translation"], sha256_short(inputs["back_translation"]))
+        files["回译稿"] = (inputs["back_translation"],
+                       digest("back_translation", inputs["back_translation"]))
     if inputs.get("glossary"):
-        files["术语表"] = (inputs["glossary"], sha256_short(inputs["glossary"]))
+        files["术语表"] = (inputs["glossary"], digest("glossary", inputs["glossary"]))
 
     errors = [c for c in report["checks"] if c["level"] == "error" and not c["passed"]]
     warns = [c for c in report["checks"] if c["level"] == "warn" and not c["passed"]]
@@ -155,7 +164,7 @@ def render_md(report: dict) -> str:
     lines.append("## 七、本报告的边界")
     lines.append("")
     lines.append("- 覆盖：段落覆盖、结构化占位符、公式、数字、文献引用、译稿残留中文、术语一致性、长度异常、相邻重复、回译往返。")
-    lines.append("- **不覆盖语义**：本报告是*机械可判项*的闸。语义是否走样（缺失/添加/扭曲）须按 `SKILL.md` Step 3 逐段比对，结论不可由本报告替代。")
+    lines.append("- **不覆盖语义**：本报告是*机械可判项*的闸。语义是否走样（缺失/添加/扭曲）须按 `SKILL.md` Step 5 逐段比对，结论不可由本报告替代。")
     lines.append("- 长度比与术语项为启发式：越界只代表「值得看一眼」，不等于错误。")
     lines.append("")
     return "\n".join(lines)
@@ -296,7 +305,7 @@ def render_html(report: dict) -> str:
   <div class="note">
     本报告覆盖<strong>机械可判项</strong>：段落覆盖、结构化占位符、公式、数字、文献引用、译稿残留中文、
     术语一致性、长度异常、相邻重复、回译往返。<br>
-    <strong>不覆盖语义</strong>：语义是否走样（缺失 / 添加 / 扭曲）须按 <code>SKILL.md</code> Step 3 逐段比对，
+    <strong>不覆盖语义</strong>：语义是否走样（缺失 / 添加 / 扭曲）须按 <code>SKILL.md</code> Step 5 逐段比对，
     本报告不能替代语义复核。长度比与术语项为启发式提示，越界不等于错误。
   </div>
 

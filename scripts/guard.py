@@ -8,7 +8,7 @@ LLM 擅长判断「这句话意思变了吗」，但有三件事它**不可靠**
   3. 保一致——同一个术语在第 3 段叫 attention mechanism、第 9 段叫 focus mechanism。
 
 这三类恰恰是审稿人和期刊编辑最先挑出来的硬错误，也恰好是脚本可以 100% 稳定判定的。
-所以分工是：**脚本判机械项（闸），LLM 判语义项（SKILL.md 的 Step 3）**。
+所以分工是：**脚本判机械项（闸），LLM 判语义项（SKILL.md 的 Step 5）**。
 
 退出码：
   0  PASS（无 error、无 warn）
@@ -19,6 +19,7 @@ LLM 擅长判断「这句话意思变了吗」，但有三件事它**不可靠**
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from collections import Counter
@@ -32,6 +33,18 @@ import bt_common as bc
 from license_check import require_license_or_exit
 
 TOOL_VERSION = "0.1.0"
+
+
+def _file_sha256(path) -> str:
+    """输入文件短哈希（12 位），随 JSON 落盘供 report.py 使用。"""
+    try:
+        h = hashlib.sha256()
+        with open(path, "rb") as fh:
+            for chunk in iter(lambda: fh.read(1 << 20), b""):
+                h.update(chunk)
+        return h.hexdigest()[:12]
+    except OSError:
+        return "n/a"
 
 EXIT_PASS, EXIT_WARN, EXIT_FAIL = 0, 1, 2
 
@@ -385,14 +398,24 @@ def build_report(
         "version": TOOL_VERSION,
         "generated_at": datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds"),
         "mode": mode,
+        # 路径按「调用时给的写法」记录（不 resolve 成绝对路径）：用相对路径调用时，
+        # 报告里就只出现相对路径，既不会把作者本机目录结构带进公开仓库，
+        # 也让同一份输入在任意机器上生成的报告逐字一致（golden 比对的前提）。
         "inputs": {
-            "source": str(Path(src_path).resolve()),
-            "translation": str(Path(tr_path).resolve()),
-            "back_translation": str(Path(back_path).resolve()) if back_path else None,
-            "glossary": str(Path(glossary_path).resolve()) if glossary_path else None,
+            "source": str(src_path),
+            "translation": str(tr_path),
+            "back_translation": str(back_path) if back_path else None,
+            "glossary": str(glossary_path) if glossary_path else None,
             "glossary_terms": len(glossary),
             "length_band": list(band),
             "strict_terms": strict_terms,
+        },
+        # 输入文件哈希随 JSON 落盘，report.py 不必再依赖路径可读（换机器/移动 JSON 都不影响）。
+        "input_sha256": {
+            "source": _file_sha256(src_path),
+            "translation": _file_sha256(tr_path),
+            "back_translation": _file_sha256(back_path) if back_path else None,
+            "glossary": _file_sha256(glossary_path) if glossary_path else None,
         },
         "stats": {
             "blocks_source": len(src_blocks),
@@ -452,7 +475,7 @@ def render_console(report: dict) -> str:
     elif report["verdict"] == "WARN":
         lines.append("→ 无硬错误，但有可疑项，建议人工复核后再交付。")
     else:
-        lines.append("→ 机械项全部通过。语义一致性仍需按 SKILL.md Step 3 人工/模型比对。")
+        lines.append("→ 机械项全部通过。语义一致性仍需按 SKILL.md Step 5 人工/模型比对。")
     return "\n".join(lines)
 
 

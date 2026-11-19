@@ -9,9 +9,10 @@
      归类，输出 before_after.md 供人读。
 
 用法：
-    cd demo/real-case && python run_real_case.py
+    cd demo/real-case && python run_real_case.py            # 校验模式：与仓库内基准逐字比对，不改工作区
+    cd demo/real-case && python run_real_case.py --update   # 更新模式：重写 before_after.md 与 guard_real_*
 
-退出码：0 = 闸通过且增量全部合规；1 = 有警告；2 = 有硬错误。
+退出码：0 = 闸通过、增量合规且（校验模式下）产物与基准一致；1 = 有警告；2 = 有硬错误或产物漂移。
 """
 
 from __future__ import annotations
@@ -20,8 +21,10 @@ import argparse
 import difflib
 import json
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -142,13 +145,14 @@ def classify(old: str, new: str) -> str:
     return CATEGORIES[4]
 
 
-def run_guard(draft_json: Path) -> int:
-    """跑保真闸。
+def run_guard(workdir: Path, json_name: str) -> int:
+    """在 workdir 里跑保真闸。
 
-    刻意用**相对路径 + cwd=本目录**：guard 会把输入路径写进 JSON，
+    刻意用**相对路径 + cwd=workdir**：guard 会把输入路径写进 JSON，
     再由 report.py 渲染进报告；用绝对路径会把作者的本机目录结构带进公开仓库。
+    校验模式下 workdir 是临时目录（输入文件先拷进去），因此产物里只有相对名。
     """
-    names = ["zh_source.md", "en_refined.md", "term_map.csv", draft_json.name]
+    names = ["zh_source.md", "en_refined.md", "term_map.csv", json_name]
     cmd = [
         sys.executable, str(SCRIPTS / "guard.py"),
         "--source", names[0],
@@ -158,18 +162,18 @@ def run_guard(draft_json: Path) -> int:
     ]
     print(f"$ python scripts/guard.py --source {names[0]} --translation {names[1]} "
           f"--glossary {names[2]} --json {names[3]}")
-    proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", cwd=HERE)
+    proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", cwd=workdir)
     print(proc.stdout.rstrip())
     if proc.stderr.strip():
         print(proc.stderr.rstrip(), file=sys.stderr)
     return proc.returncode
 
 
-def run_report(json_name: str) -> None:
+def run_report(workdir: Path, json_name: str) -> None:
     """把 guard JSON 渲染成可转发的 MD + 单文件 HTML。"""
     proc = subprocess.run(
         [sys.executable, str(SCRIPTS / "report.py"), json_name],
-        capture_output=True, text=True, encoding="utf-8", cwd=HERE,
+        capture_output=True, text=True, encoding="utf-8", cwd=workdir,
     )
     for line in proc.stdout.splitlines():
         if line.strip().startswith(("Markdown", "HTML", "结论")):
@@ -178,9 +182,37 @@ def run_report(json_name: str) -> None:
         print(proc.stderr.rstrip(), file=sys.stderr)
 
 
+# 仓库内作为「基准」的产物；--update 时写回，默认模式下只生成到临时目录再比对。
+ARTIFACTS = ("guard_real.json", "guard_real_report.md", "guard_real_report.html", "before_after.md")
+_TS_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[+-]\d{2}:\d{2}")
+
+
+def normalize_ts(text: str) -> str:
+    """把 ISO-8601 生成时间归一，避免「只差时间戳」被判成漂移。"""
+    return _TS_RE.sub("<generated_at>", text)
+
+
+def compare_artifacts(workdir: Path, skip_guard: bool = False) -> list[str]:
+    """把临时目录里的产物与仓库内基准逐字比对（忽略 generated_at）。"""
+    names = ARTIFACTS[3:] if skip_guard else ARTIFACTS
+    drift = []
+    for name in names:
+        fresh, base = workdir / name, HERE / name
+        if not fresh.is_file():
+            drift.append(f"{name}: 未生成")
+        elif not base.is_file():
+            drift.append(f"{name}: 仓库内缺少基准（用 --update 生成）")
+        elif normalize_ts(fresh.read_text(encoding="utf-8")) != normalize_ts(
+                base.read_text(encoding="utf-8")):
+            drift.append(f"{name}: 与基准不一致")
+    return drift
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--skip-guard", action="store_true", help="只做增量校验，不跑保真闸")
+    ap.add_argument("--update", action="store_true",
+                    help="重写仓库内的基准产物（默认：写临时目录并与基准比对，不改工作区）")
     args = ap.parse_args()
 
     zh = read_blocks(HERE / "zh_source.md")
@@ -225,17 +257,43 @@ def main() -> int:
             print(f"      block {i}: {old!r} → {new!r}")
 
     # ---- 3. 保真闸 --------------------------------------------------------
+    # 默认（校验模式）在临时目录里生成产物，再与仓库内基准比对；只有 --update 才写回仓库。
+    workdir = HERE if args.update else Path(tempfile.mkdtemp(prefix="bt-realcase-"))
+    if workdir != HERE:
+        for name in ("zh_source.md", "en_refined.md", "term_map.csv"):
+            shutil.copy2(HERE / name, workdir / name)
     guard_rc = 0
-    if not args.skip_guard:
-        print("\n[3] 保真闸（中文原稿 vs 精修稿）")
-        guard_rc = run_guard(HERE / "guard_real.json")
-        print(f"  guard 退出码: {guard_rc}（0=PASS 1=WARN 2=FAIL）")
-        run_report("guard_real.json")
+    drift: list[str] = []
+    try:
+        if not args.skip_guard:
+            print("\n[3] 保真闸（中文原稿 vs 精修稿）")
+            guard_rc = run_guard(workdir, "guard_real.json")
+            print(f"  guard 退出码: {guard_rc}（0=PASS 1=WARN 2=FAIL）")
+            run_report(workdir, "guard_real.json")
 
-    write_before_after(zh, draft, refined, buckets, changed_blocks)
+        write_before_after(zh, draft, refined, buckets, changed_blocks, workdir)
 
-    ok = violations == 0 and guard_rc == 0
-    print(f"\n{'✓ 真实案例复现成功' if ok else '✗ 存在问题，见上'}；明细见 before_after.md")
+        if workdir != HERE:
+            print("\n[4] 与仓库内基准比对（忽略 generated_at 时间戳）")
+            drift = compare_artifacts(workdir, skip_guard=args.skip_guard)
+            for item in drift:
+                print(f"  ✗ {item}")
+            if not drift:
+                print("  ✓ 产物与基准逐字一致；工作区未被修改")
+    finally:
+        if workdir != HERE:
+            shutil.rmtree(workdir, ignore_errors=True)
+
+    ok = violations == 0 and guard_rc == 0 and not drift
+    if ok:
+        print("\n✓ 真实案例复现成功" + ("（已更新基准，请 git diff 确认后提交）" if args.update
+                                      else "；明细见 before_after.md"))
+    else:
+        print("\n✗ 存在问题，见上" + (
+            "；若确认是预期变更，运行 `python run_real_case.py --update` 更新基准" if drift else
+            "；明细见 before_after.md"))
+    if drift:
+        return 2
     return 0 if ok else (2 if violations or guard_rc == 2 else 1)
 
 
@@ -245,6 +303,7 @@ def write_before_after(
     refined: list[str],
     buckets: dict[str, list[tuple[int, str, str]]],
     changed_blocks: int,
+    out_dir: Path,
 ) -> None:
     """把 before/after 写成人类可读的 markdown（逐段并列 + 编辑点表）。"""
     per_block: dict[int, list[tuple[str, str, str]]] = defaultdict(list)
@@ -302,8 +361,9 @@ def write_before_after(
         "受保护元素（数字、引用、Eq. 编号）在初稿→精修之间**零变动**，由脚本逐块校验。",
         "",
     ]
-    (HERE / "before_after.md").write_text("\n".join(lines), encoding="utf-8")
-    print(f"\n已写出 {HERE / 'before_after.md'}")
+    (out_dir / "before_after.md").write_text("\n".join(lines), encoding="utf-8")
+    label = "仓库" if out_dir == HERE else "临时目录"
+    print(f"\n已写出 {out_dir / 'before_after.md'}（{label}）")
 
 
 if __name__ == "__main__":

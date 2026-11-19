@@ -103,7 +103,7 @@ def render(src: dict, rs: list[tuple[str, str]], glossary_n: int, tr: dict | Non
     lines.append("## 处理规模建议")
     lines.append("")
     lines.append(f"- 正译/回译建议分 **{batches}** 批（每批 ≤ {BATCH_CJK} 汉字），逐批跑 guard 再合并")
-    lines.append(f"- 迭代上限建议 **3–5 轮**；同一段连续两轮无改进即停（见 SKILL.md Step 4）")
+    lines.append(f"- 迭代上限建议 **3–5 轮**；同一段连续两轮无改进即停（见 SKILL.md Step 5）")
     lines.append(f"- 术语：{'已提供 ' + str(glossary_n) + ' 条' if glossary_n else '**未提供**——建议先跑 glossary.py extract 固化成表，否则前后不一致无从检查'}")
     lines.append("")
 
