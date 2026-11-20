@@ -1,5 +1,7 @@
 # back-translate-refinement
 
+[English](README.en.md) | 简体中文
+
 [![CI](https://img.shields.io/github/actions/workflow/status/GongfaChen/back-translate-refinement/ci.yml?branch=main&label=CI)](https://github.com/GongfaChen/back-translate-refinement/actions/workflows/ci.yml)
 [![release](https://img.shields.io/github/v/release/GongfaChen/back-translate-refinement)](https://github.com/GongfaChen/back-translate-refinement/releases)
 [![license](https://img.shields.io/github/license/GongfaChen/back-translate-refinement)](LICENSE)
@@ -20,6 +22,10 @@
 ```
 
 工具链把循环里**机械可判**的部分全部自动化（LLM 数数字不可靠、数结构不可靠、保一致不可靠——这三类恰是审稿人最先挑的硬错误）。
+
+> **配套仓库**：[pdf-to-pptx-omml](https://github.com/GongfaChen/pdf-to-pptx-omml)
+> —— 把 PDF 教材章节变成公式可编辑的 PPT（含扫描版教材）。
+> 英文讲义要做出来再翻好，两仓可以串成全链路。
 
 ## 效果演示
 
